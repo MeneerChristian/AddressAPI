@@ -19,9 +19,49 @@ namespace AddressAPI.Controllers
 
         // GET api/address?
         [HttpGet]
-        public ActionResult<IEnumerable<Address>> Get()
+        public ActionResult<IEnumerable<Address>> Get(string city, string zip, string country, string street, string number, bool exact)
         {
             var addresses = _context.Addresses.ToList();
+
+            if (!string.IsNullOrEmpty(city))
+            {
+                if (exact)
+                    addresses = addresses.Where(a => a.City.ToLower().Equals(city.ToLower())).ToList();
+                else
+                    addresses = addresses.Where(a => a.City.ToLower().Contains(city.ToLower())).ToList();
+            }
+
+            if (!string.IsNullOrEmpty(zip))
+            {
+                if (exact)
+                    addresses = addresses.Where(a => a.Zip.ToLower().Equals(zip.ToLower())).ToList();
+                else
+                    addresses = addresses.Where(a => a.Zip.ToLower().Contains(zip.ToLower())).ToList();
+            }
+
+            if (!string.IsNullOrEmpty(country))
+            {
+                if (exact)
+                    addresses = addresses.Where(a => a.Country.ToLower().Equals(country.ToLower())).ToList();
+                else
+                    addresses = addresses.Where(a => a.Country.ToLower().Contains(country.ToLower())).ToList();
+            }
+
+            if (!string.IsNullOrEmpty(street))
+            {
+                if (exact)
+                    addresses = addresses.Where(a => a.Street.ToLower().Equals(street.ToLower())).ToList();
+                else
+                    addresses = addresses.Where(a => a.Street.ToLower().Contains(street.ToLower())).ToList();
+            }
+
+            if (!string.IsNullOrEmpty(number))
+            {
+                if (exact)
+                    addresses = addresses.Where(a => a.HouseNumber.ToLower().Equals(number.ToLower())).ToList();
+                else
+                    addresses = addresses.Where(a => a.HouseNumber.ToLower().Contains(number.ToLower())).ToList();
+            }
 
             return addresses;
         }
