@@ -6,7 +6,6 @@ using AddressAPI.Data;
 using AddressAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Dynamic;
 using Newtonsoft.Json;
 
 namespace AddressAPI.Controllers
@@ -79,7 +78,7 @@ namespace AddressAPI.Controllers
             return _context.Addresses.FirstOrDefault(a => a.Id == id);
         }
 
-        // POST api/address
+        // PUT api/address
         [HttpPut]
         public ActionResult Put([FromBody] Address address)
         {
@@ -136,8 +135,8 @@ namespace AddressAPI.Controllers
 
         private double GetDistance(double lat1, double lng1, double lat2, double lng2)
         {
-            var R = 6371; // Radius of the earth in km
-            var dLat = deg2rad(lat2-lat1);  // deg2rad below
+            var R = 6371;
+            var dLat = deg2rad(lat2-lat1);
             var dLon = deg2rad(lng2-lng1); 
             var a = 
                 Math.Sin(dLat/2) * Math.Sin(dLat/2) +
@@ -145,7 +144,7 @@ namespace AddressAPI.Controllers
                 Math.Sin(dLon/2) * Math.Sin(dLon/2)
                 ; 
             var c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1-a)); 
-            var d = R * c; // Distance in km
+            var d = R * c;
             return d;
         }
 

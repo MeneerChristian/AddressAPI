@@ -1,0 +1,24 @@
+Om te gebruiken
+    Clone project naar een lokale map
+    Open cmd in de map
+    Voer de volgende commando's uit:
+        dotnet build
+    
+
+    Nu kun je de applicatie draaien met:
+        dotnet run
+
+    Om de measure endpoint te testen:
+        Creeer 2 nieuwe adressen via de endpoint:
+            PUT /api/address
+
+        Om de id van de nieuwe adressen te krijgen:
+            GET /api/address
+
+        Stuur een request naar de endpoint:
+            GET /api/measure/{id1}/{id2}
+
+De applicatie is gebouwd met ASP.NET Core en Entity Framework Core.
+
+Ik ben erg blij met de simplistische filter functionaliteit.
+De verdeling van de methodes is makkelijker te begrijpen door deze op te splitsen in een aantal kleinere methodes.
