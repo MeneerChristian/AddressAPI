@@ -20,6 +20,11 @@ namespace AddressAPI
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+
+            using(var client = new DatabaseContext())
+            {
+                client.Database.EnsureCreated();
+            }
         }
 
         public IConfiguration Configuration { get; }
