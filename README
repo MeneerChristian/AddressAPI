@@ -21,4 +21,4 @@ Om te gebruiken
 De applicatie is gebouwd met ASP.NET Core en Entity Framework Core.
 
 Ik ben erg blij met de simplistische filter functionaliteit.
-De verdeling van de methodes is makkelijker te begrijpen door deze op te splitsen in een aantal kleinere methodes.
+De functionaliteit is makkelijker te begrijpen door methodes op te splitsen in een aantal kleinere funtionaliteiten, dit heb ik met de afstandsberekening gedaan voor lees / schrijf gemak.
