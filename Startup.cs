@@ -34,7 +34,9 @@ namespace AddressAPI
         {
             services.AddEntityFrameworkSqlite().AddDbContext<DatabaseContext>();
 
-            services.AddControllers();
+            services.AddControllers(o => {
+                o.AllowEmptyInputInBodyModelBinding = true;
+            });
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "AddressAPI", Version = "v1" });

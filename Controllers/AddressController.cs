@@ -25,39 +25,46 @@ namespace AddressAPI.Controllers
 
         // GET api/address
         [HttpGet]
-        public ActionResult<IEnumerable<Address>> Get([FromForm] AddressFilter data)
+        public ActionResult<IEnumerable<Address>> Get([FromBody] AddressFilter data)
         {
             var addresses = _context.Addresses.AsQueryable();
 
-            if (data != null) {
-                var exact = data.Exact;
-                
-                // Check if variable is set in data and if it is not null filter addresses by that variable dynamically
-                if (exact)
-                    addresses = addresses.Where(a => a.Street == (data.Street ?? a.Street))
-                                        .Where(a => a.City == (data.City ?? a.City))
-                                        .Where(a => a.Zip == (data.Zip ?? a.Zip))
-                                        .Where(a => a.Country == (data.Country ?? a.Country))
-                                        .Where(a => a.HouseNumber == (data.HouseNumber ?? a.HouseNumber));
-                else
-                    addresses = addresses.Where(a => a.Street.Contains(data.Street ?? a.Street))
-                                        .Where(a => a.City.Contains(data.City ?? a.City))
-                                        .Where(a => a.Zip.Contains(data.Zip ?? a.Zip))
-                                        .Where(a => a.Country.Contains(data.Country ?? a.Country))
-                                        .Where(a => a.HouseNumber.Contains(data.HouseNumber ?? a.HouseNumber));
-                
-
-                // Sort addresses by SortBy with SortOrder 
-                if (String.IsNullOrEmpty(data.SortBy))
-                {
-                    if (!String.IsNullOrEmpty(data.SortOrder) && data.SortOrder == "desc")
-                        addresses = addresses.OrderByDescending(d => typeof(Address).GetProperty(data.SortBy).GetValue(d, null));
-                    else if(data.SortOrder == "asc")
-                        addresses = addresses.OrderBy(d => typeof(Address).GetProperty(data.SortBy).GetValue(d, null));
-                }
-            }
+            if (data != null) 
+                return Filter(addresses, data);
 
             return addresses.ToList();
+        }
+
+        // Address filter / sorter
+        private List<Address> Filter(IQueryable<Address> addresses, AddressFilter data) {
+            var exact = data.Exact;
+                
+            // Check if variable is set in data and if it is not null filter addresses by that variable dynamically
+            if (exact)
+                addresses = addresses.Where(a => a.Street == (data.Street ?? a.Street))
+                                    .Where(a => a.City == (data.City ?? a.City))
+                                    .Where(a => a.Zip == (data.Zip ?? a.Zip))
+                                    .Where(a => a.Country == (data.Country ?? a.Country))
+                                    .Where(a => a.HouseNumber == (data.HouseNumber ?? a.HouseNumber));
+            else
+                addresses = addresses.Where(a => a.Street.Contains(data.Street ?? a.Street))
+                                    .Where(a => a.City.Contains(data.City ?? a.City))
+                                    .Where(a => a.Zip.Contains(data.Zip ?? a.Zip))
+                                    .Where(a => a.Country.Contains(data.Country ?? a.Country))
+                                    .Where(a => a.HouseNumber.Contains(data.HouseNumber ?? a.HouseNumber));
+            
+            var addressList = addresses.ToList();
+
+            // Sort addresses by SortBy with SortOrder 
+            if (!String.IsNullOrEmpty(data.SortBy))
+            {
+                if (!String.IsNullOrEmpty(data.SortOrder) && data.SortOrder == "desc")
+                    addressList = addressList.OrderByDescending(d => typeof(Address).GetProperty(data.SortBy).GetValue(d, null)).ToList();
+                else if(String.IsNullOrEmpty(data.SortOrder) || data.SortOrder == "asc")
+                    addressList = addressList.OrderBy(d => typeof(Address).GetProperty(data.SortBy).GetValue(d, null)).ToList();
+            }
+            
+            return addressList;
         }
 
         // GET api/address/5
